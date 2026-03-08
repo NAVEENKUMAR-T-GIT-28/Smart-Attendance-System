@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttendGuard — Frontend Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── DESIGN TOKENS ─────────────────────────────────────────────────────── */
+:root {
+  /* Core Palette */
+  --white:        #FFFFFF;
+  --bg:           #F7F8FC;
+  --bg-subtle:    #EEF1F8;
+  --surface:      #FFFFFF;
+  --surface-2:    #F0F3FA;
+
+  /* Brand — Slate/Indigo academic */
+  --brand-50:     #EEF2FF;
+  --brand-100:    #E0E7FF;
+  --brand-200:    #C7D2FE;
+  --brand-500:    #4F46E5;
+  --brand-600:    #4338CA;
+  --brand-700:    #3730A3;
+
+  /* Semantic */
+  --success-bg:   #F0FDF4;
+  --success-border:#BBF7D0;
+  --success:      #16A34A;
+  --success-dark: #15803D;
+
+  --warning-bg:   #FFFBEB;
+  --warning-border:#FDE68A;
+  --warning:      #D97706;
+
+  --danger-bg:    #FFF1F2;
+  --danger-border:#FECDD3;
+  --danger:       #E11D48;
+
+  --info-bg:      #EFF6FF;
+  --info-border:  #BFDBFE;
+  --info:         #2563EB;
+
+  /* Text */
+  --text-primary:   #0F172A;
+  --text-secondary: #475569;
+  --text-tertiary:  #94A3B8;
+  --text-inverse:   #FFFFFF;
+
+  /* Border */
+  --border:       #E2E8F0;
+  --border-focus: #4F46E5;
+
+  /* Shadow */
+  --shadow-xs:  0 1px 2px rgba(15,23,42,0.06);
+  --shadow-sm:  0 1px 3px rgba(15,23,42,0.08), 0 1px 2px rgba(15,23,42,0.06);
+  --shadow-md:  0 4px 6px rgba(15,23,42,0.07), 0 2px 4px rgba(15,23,42,0.06);
+  --shadow-lg:  0 10px 15px rgba(15,23,42,0.08), 0 4px 6px rgba(15,23,42,0.05);
+  --shadow-xl:  0 20px 25px rgba(15,23,42,0.08), 0 8px 10px rgba(15,23,42,0.04);
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-2xl:28px;
+  --r-full: 9999px;
+
+  /* Font */
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  /* Spacing */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --sp-12: 48px; --sp-16: 64px;
+
+  /* Sidebar */
+  --sidebar-w: 240px;
+  --sidebar-collapsed: 68px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── LAYOUT: DOC SHELL ─────────────────────────────────────────────────── */
+.doc { max-width: 1200px; margin: 0 auto; padding: 48px 32px 120px; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-500);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 40px;
+  max-width: 560px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 64px 0;
+}
+
+/* ─── TITLE ─────────────────────────────────────────────────────────────── */
+.title-block {
+  padding: 56px 0 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 64px;
+}
+
+.title-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--brand-50);
+  border: 1px solid var(--brand-200);
+  color: var(--brand-600);
+  padding: 4px 12px;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+}
+
+.title-block h1 {
+  font-family: var(--font-display);
+  font-size: 52px;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+
+.title-block h1 em {
+  font-style: italic;
+  color: var(--brand-500);
+}
+
+.title-block p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+/* ─── SECTION 1: COLOR TOKENS ───────────────────────────────────────────── */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.color-swatch {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.swatch-color {
+  height: 72px;
+}
+
+.swatch-info {
+  padding: 10px 12px;
+  background: white;
+}
+
+.swatch-name {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.swatch-hex {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+}
+
+.swatch-use {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* typography scale */
+.type-scale { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; }
+
+.type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.type-meta { min-width: 160px; }
+.type-meta .name { font-family: var(--font-mono); font-size: 11px; color: var(--brand-500); font-weight: 500; }
+.type-meta .spec { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* ─── SECTION 2: COMPONENTS ─────────────────────────────────────────────── */
+.component-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.component-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.component-block h4 {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--brand-500);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(79,70,229,0.3), 0 0 0 1px rgba(79,70,229,0.1);
+}
+.btn-primary:hover { background: var(--brand-600); box-shadow: 0 4px 12px rgba(79,70,229,0.3); transform: translateY(-1px); }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+}
+.btn-secondary:hover { background: var(--bg-subtle); border-color: var(--brand-200); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--brand-500);
+  padding: 10px 20px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+}
+.btn-ghost:hover { background: var(--brand-50); }
+
+.btn-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  padding: 10px 20px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  border: 1px solid var(--danger-border);
+}
+
+.btn-success {
+  background: var(--success);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(22,163,74,0.3);
+}
+
+.btn-sm { padding: 6px 14px; font-size: 12px; border-radius: var(--r-sm); }
+.btn-lg { padding: 14px 28px; font-size: 15px; border-radius: var(--r-lg); }
+.btn-xl { padding: 18px 40px; font-size: 16px; border-radius: var(--r-xl); font-weight: 600; }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.badge-present { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.badge-absent  { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.badge-open    { background: var(--info-bg); color: var(--info); border: 1px solid var(--info-border); }
+.badge-closed  { background: var(--bg-subtle); color: var(--text-secondary); border: 1px solid var(--border); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card .stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.stat-card .stat-value {
+  font-family: var(--font-display);
+  font-size: 36px;
+  line-height: 1;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.stat-card .stat-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Input */
+.input-group { margin-bottom: 16px; }
+.input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--surface);
+  transition: border-color 0.15s;
+  outline: none;
+}
+.input:focus { border-color: var(--brand-500); box-shadow: 0 0 0 3px rgba(79,70,229,0.08); }
+.input::placeholder { color: var(--text-tertiary); }
+
+/* Progress bar */
+.progress-wrap { background: var(--bg-subtle); border-radius: var(--r-full); height: 6px; overflow: hidden; }
+.progress-fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: linear-gradient(90deg, var(--brand-500), #818CF8);
+  transition: width 0.6s ease;
+}
+.progress-success .progress-fill { background: linear-gradient(90deg, var(--success), #4ADE80); }
+.progress-warning .progress-fill { background: linear-gradient(90deg, var(--warning), #FCD34D); }
+
+/* Alert */
+.alert {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  font-size: 13px;
+}
+.alert-success { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success-dark); }
+.alert-warning { background: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning); }
+.alert-danger  { background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger); }
+.alert-info    { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info); }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* Avatar */
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: var(--r-full);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* ─── SECTION 3: PAGE FLOWS ─────────────────────────────────────────────── */
+
+/* ── SHARED SIDEBAR ── */
+.app-shell {
+  display: flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  height: 640px;
+}
+
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--brand-500);
+  border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.sidebar-nav {
+  padding: 12px 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 8px 10px 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--r-md);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 1px;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: var(--bg-subtle); color: var(--text-primary); }
+.nav-item.active { background: var(--brand-50); color: var(--brand-600); }
+.nav-item.active .nav-icon { color: var(--brand-500); }
+
+.nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--brand-500);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--r-full);
+  min-width: 18px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 12px 10px;
+  border-top: 1px solid var(--border);
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.user-card:hover { background: var(--bg-subtle); }
+.user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.user-role { font-size: 11px; color: var(--text-tertiary); }
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.page-sub { font-size: 13px; color: var(--text-tertiary); margin-top: 2px; }
+
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+/* stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stats-row-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table thead tr { border-bottom: 1.5px solid var(--border); }
+.data-table th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.data-table td { padding: 11px 12px; border-bottom: 1px solid var(--bg-subtle); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--bg-subtle); }
+
+/* dot status */
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+.dot-green { background: var(--success); box-shadow: 0 0 0 3px var(--success-bg); }
+.dot-red   { background: var(--danger); box-shadow: 0 0 0 3px var(--danger-bg); }
+.dot-amber { background: var(--warning); box-shadow: 0 0 0 3px var(--warning-bg); }
+
+/* Grid 2 */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* ── PAGE: LOGIN ── */
+.login-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  height: 580px;
+}
+
+.login-left {
+  background: linear-gradient(145deg, var(--brand-700) 0%, var(--brand-500) 60%, #818CF8 100%);
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.login-left::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+
+.login-brand {
+  position: relative; z-index: 1;
+}
+
+.login-brand-logo {
+  width: 48px; height: 48px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: var(--r-lg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.login-brand-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.login-brand-title em { font-style: italic; opacity: 0.85; }
+
+.login-brand-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.login-features {
+  position: relative; z-index: 1;
+}
+.login-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+}
+.login-feature-icon {
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.12);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.login-right {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-title { font-family: var(--font-display); font-size: 26px; margin-bottom: 6px; }
+.login-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
+
+.role-tabs {
+  display: flex;
+  background: var(--bg-subtle);
+  border-radius: var(--r-md);
+  padding: 3px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+}
+
+.role-tab {
+  flex: 1;
+  padding: 8px;
+  border-radius: var(--r-sm);
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+
+.role-tab.active {
+  background: var(--surface);
+  color: var(--brand-600);
+  box-shadow: var(--shadow-xs);
+  font-weight: 600;
+}
+
+/* ── STUDENT ATTENDANCE PAGE (MOBILE) ── */
+.mobile-frame {
+  width: 320px;
+  background: var(--surface);
+  border-radius: 32px;
+  border: 6px solid var(--text-primary);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  position: relative;
+}
+
+.mobile-notch {
+  width: 100px; height: 24px;
+  background: var(--text-primary);
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto;
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  z-index: 10;
+}
+
+.mobile-screen {
+  background: var(--bg);
+  min-height: 640px;
+  padding-top: 36px;
+  overflow: hidden;
+}
+
+.mobile-header {
+  background: var(--surface);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.mobile-nav-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.mobile-content { padding: 16px; }
+
+/* Big Attend Button */
+.attend-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.attend-subject {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-500);
+  font-family: var(--font-mono);
+  margin-bottom: 4px;
+}
+
+.attend-class {
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.attend-meta {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 20px;
+}
+
+.attend-btn-big {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--r-xl);
+  background: var(--brand-500);
+  color: white;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.attend-btn-big::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1));
+}
+
+/* Step states */
+.step-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--r-lg);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--bg-subtle);
+  border: 1px solid transparent;
+  transition: all 0.3s;
+}
+.step-item.done { background: var(--success-bg); border-color: var(--success-border); color: var(--success-dark); }
+.step-item.active { background: var(--info-bg); border-color: var(--info-border); color: var(--info); }
+.step-item.waiting { color: var(--text-tertiary); }
+
+.step-icon { font-size: 16px; flex-shrink: 0; }
+.step-text { flex: 1; }
+.step-status { font-size: 12px; font-family: var(--font-mono); }
+
+/* success state */
+.success-card {
+  background: linear-gradient(135deg, var(--success-bg), #F0FDF4);
+  border: 1.5px solid var(--success-border);
+  border-radius: var(--r-xl);
+  padding: 24px 20px;
+  text-align: center;
+  margin: 14px 0;
+}
+
+.success-icon-ring {
+  width: 64px; height: 64px;
+  background: var(--success);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 28px;
+  color: white;
+  box-shadow: 0 0 0 8px rgba(22,163,74,0.12);
+}
+
+.success-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--success-dark);
+  margin-bottom: 4px;
+}
+
+.success-sub {
+  font-size: 12px;
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
+/* mini attendance history */
+.history-list { display: flex; flex-direction: column; gap: 6px; }
+
+.history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  font-size: 12.5px;
+}
+
+.history-subj { font-weight: 600; color: var(--text-primary); }
+.history-time { color: var(--text-tertiary); font-size: 11px; margin-top: 1px; }
+
+/* ── HOD DASHBOARD ── */
+.session-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 8px;
+}
+
+.session-subject { font-weight: 600; font-size: 13.5px; }
+.session-meta { font-size: 11.5px; color: var(--text-secondary); margin-top: 2px; }
+.session-actions { margin-left: auto; display: flex; gap: 6px; }
+
+/* live pulse */
+.live-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
+  animation: livepulse 1.8s ease-in-out infinite;
+}
+@keyframes livepulse { 0%,100%{box-shadow: 0 0 0 3px rgba(22,163,74,0.15)} 50%{box-shadow: 0 0 0 7px rgba(22,163,74,0.08)} }
+
+/* teacher live session */
+.live-session-banner {
+  background: linear-gradient(135deg, var(--brand-50) 0%, #EEF2FF 100%);
+  border: 1.5px solid var(--brand-200);
+  border-radius: var(--r-xl);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.live-session-info .session-name { font-family: var(--font-display); font-size: 20px; color: var(--text-primary); }
+.live-session-info .session-detail { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
+
+.live-count {
+  text-align: center;
+}
+.live-count .count-num {
+  font-family: var(--font-display);
+  font-size: 42px;
+  line-height: 1;
+  color: var(--brand-500);
+}
+.live-count .count-label { font-size: 11px; color: var(--text-tertiary); font-weight: 500; }
+
+/* attendance percentage ring */
+.ring-wrap { position: relative; width: 64px; height: 64px; flex-shrink: 0; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: var(--bg-subtle); stroke-width: 6; }
+.ring-fill { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+.ring-text {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+}
+
+/* page flow arrows */
+.flow-diagram {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.flow-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 120px;
+}
+
+.flow-box {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-xs);
+  white-space: nowrap;
+}
+
+.flow-box.brand { border-color: var(--brand-200); background: var(--brand-50); color: var(--brand-600); }
+.flow-box.success { border-color: var(--success-border); background: var(--success-bg); color: var(--success-dark); }
+.flow-box.warning { border-color: var(--warning-border); background: var(--warning-bg); color: var(--warning); }
+
+.flow-label { font-size: 10px; color: var(--text-tertiary); margin-top: 6px; font-family: var(--font-mono); }
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  margin-top: 14px;
+  color: var(--text-tertiary);
+  font-size: 18px;
+}
+
+/* ─── SCROLLBAR ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* ─── ANIMATIONS ────────────────────────────────────────────────────────── */
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.animate { animation: fadein 0.4s ease both; }
+
+/* tabs for page switching */
+.page-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 4px;
+  width: fit-content;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.page-tab {
+  padding: 8px 18px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.page-tab.active {
+  background: var(--surface);
+  color: var(--brand-600);
+  box-shadow: var(--shadow-xs);
+  font-weight: 600;
+}
+
+.page-view { display: none; }
+.page-view.active { display: block; animation: fadein 0.3s ease both; }
+
+/* mobile states tabs */
+.state-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.state-tab {
+  padding: 5px 12px;
+  border-radius: var(--r-full);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  transition: all 0.15s;
+}
+.state-tab.active {
+  background: var(--brand-500);
+  color: white;
+  border-color: var(--brand-500);
+}
+
+.mobile-state { display: none; }
+.mobile-state.active { display: block; animation: fadein 0.3s ease both; }
+
+/* section heading */
+.section-head {
+  padding: 48px 0 32px;
+}
+
+/* spacing helpers */
+.mt-4 { margin-top: 16px; }
+.mt-6 { margin-top: 24px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-6 { margin-bottom: 24px; }
+
+/* full-width component block */
+.component-block-full {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+.component-block-full h4 {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* token table */
+.token-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.token-table td { padding: 9px 12px; border-bottom: 1px solid var(--bg-subtle); vertical-align: middle; }
+.token-table tr:last-child td { border-bottom: none; }
+.token-name { font-family: var(--font-mono); font-size: 12px; color: var(--brand-600); }
+.token-val  { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+.token-swatch { width: 22px; height: 22px; border-radius: 4px; display: inline-block; border: 1px solid rgba(0,0,0,0.06); vertical-align: middle; }
+
+/* percentage ring helper */
+.perc-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.perc-info { flex: 1; }
+.perc-subject { font-weight: 600; font-size: 13.5px; }
+.perc-detail  { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <!-- ─── TITLE ─────────────────────────────────────────────────────────── -->
+  <div class="title-block">
+    <div class="title-eyebrow">✦ Frontend Design System v1.0</div>
+    <h1>AttendGuard <em>Design</em></h1>
+    <p>Complete color system, component library, and page-level visualization for all three roles — HOD, Teacher, and Student.</p>
+  </div>
+
+  <!-- ─── SECTION 1: DESIGN TOKENS ─────────────────────────────────────── -->
+  <div class="section-head">
+    <div class="section-label">01 — Design Tokens</div>
+    <div class="section-title">Color System</div>
+    <div class="section-desc">Light theme built on Slate/Indigo. Academic, trustworthy, clean. Every color has a clear semantic role.</div>
+  </div>
+
+  <div class="color-grid">
+    <div class="color-swatch"><div class="swatch-color" style="background:#4F46E5"></div><div class="swatch-info"><div class="swatch-name">Brand 500</div><div class="swatch-hex">#4F46E5</div><div class="swatch-use">Primary CTA, links, active nav</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#4338CA"></div><div class="swatch-info"><div class="swatch-name">Brand 600</div><div class="swatch-hex">#4338CA</div><div class="swatch-use">Hover state, active text</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#EEF2FF"></div><div class="swatch-info"><div class="swatch-name">Brand 50</div><div class="swatch-hex">#EEF2FF</div><div class="swatch-use">Active nav bg, light tint</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#F7F8FC"></div><div class="swatch-info"><div class="swatch-name">BG</div><div class="swatch-hex">#F7F8FC</div><div class="swatch-use">Page background</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#FFFFFF; border:1px solid #E2E8F0"></div><div class="swatch-info"><div class="swatch-name">Surface</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-use">Cards, sidebar, modals</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#0F172A"></div><div class="swatch-info"><div class="swatch-name">Text Primary</div><div class="swatch-hex">#0F172A</div><div class="swatch-use">Headings, body copy</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#16A34A"></div><div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-hex">#16A34A</div><div class="swatch-use">Present badge, confirmed</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#E11D48"></div><div class="swatch-info"><div class="swatch-name">Danger</div><div class="swatch-hex">#E11D48</div><div class="swatch-use">Absent badge, errors</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#D97706"></div><div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-hex">#D97706</div><div class="swatch-use">Low attendance warning</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#2563EB"></div><div class="swatch-info"><div class="swatch-name">Info</div><div class="swatch-hex">#2563EB</div><div class="swatch-use">Session open, info states</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#E2E8F0"></div><div class="swatch-info"><div class="swatch-name">Border</div><div class="swatch-hex">#E2E8F0</div><div class="swatch-use">All dividers and outlines</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#94A3B8"></div><div class="swatch-info"><div class="swatch-name">Text Tertiary</div><div class="swatch-hex">#94A3B8</div><div class="swatch-use">Placeholders, metadata</div></div></div>
+  </div>
+
+  <!-- Typography -->
+  <div class="section-label" style="margin-top:48px">Typography Scale</div>
+  <div style="margin-bottom:8px;font-size:13px;color:var(--text-secondary)">Display: <strong>Instrument Serif</strong> — for page titles and large numbers. Body: <strong>DM Sans</strong> — readable, friendly. Code/mono: <strong>DM Mono</strong> — labels, tokens, IDs.</div>
+
+  <div class="type-scale mt-4">
+    <div class="type-row"><div class="type-meta"><div class="name">display-xl</div><div class="spec">Instrument Serif · 52px</div></div><div style="font-family:var(--font-display);font-size:52px;line-height:1;color:var(--text-primary)">AttendGuard</div></div>
+    <div class="type-row"><div class="type-meta"><div class="name">heading-1</div><div class="spec">Instrument Serif · 32px</div></div><div style="font-family:var(--font-display);font-size:32px;line-height:1.2;color:var(--text-primary)">Dashboard Overview</div></div>
+    <div class="type-row"><div class="type-meta"><div class="name">heading-2</div><div class="spec">DM Sans · 20px · 600</div></div><div style="font-size:20px;font-weight:600;color:var(--text-primary)">Data Structures & Algorithms</div></div>
+    <div class="type-row"><div class="type-meta"><div class="name">body</div><div class="spec">DM Sans · 14px · 400</div></div><div style="font-size:14px;color:var(--text-secondary)">Attendance session opened by Prof. Meena R. · Today 9:00 AM</div></div>
+    <div class="type-row"><div class="type-meta"><div class="name">label</div><div class="spec">DM Sans · 11px · 600 · uppercase</div></div><div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-tertiary)">Attendance Rate</div></div>
+    <div class="type-row"><div class="type-meta"><div class="name">mono</div><div class="spec">DM Mono · 12px</div></div><div style="font-family:var(--font-mono);font-size:13px;color:var(--brand-600)">CSE · Year 2 · Sec A · CS301</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 2: COMPONENTS ─────────────────────────────────────────── -->
+  <div class="section-label">02 — Components</div>
+  <div class="section-title">Component Library</div>
+  <div class="section-desc">Every reusable UI piece with all states. Build these once in your React project and compose pages from them.</div>
+
+  <div class="component-grid">
+    <!-- Buttons -->
+    <div class="component-block">
+      <h4>Buttons</h4>
+      <div class="btn-row">
+        <button class="btn btn-primary">Mark Attendance</button>
+        <button class="btn btn-secondary">Cancel</button>
+        <button class="btn btn-ghost">View Report</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-success">Open Session</button>
+        <button class="btn btn-danger">Close Session</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary btn-sm">Small</button>
+        <button class="btn btn-primary">Default</button>
+        <button class="btn btn-primary btn-lg">Large</button>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="component-block">
+      <h4>Badges & Status</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+        <span class="badge badge-present">● Present</span>
+        <span class="badge badge-absent">● Absent</span>
+        <span class="badge badge-open">● Session Open</span>
+        <span class="badge badge-closed">Session Closed</span>
+        <span class="badge badge-warning">⚠ Low Attendance</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px">
+          <span class="status-dot dot-green"></span> <span>Active session</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px">
+          <span class="status-dot dot-amber"></span> <span>Pending verification</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px">
+          <span class="status-dot dot-red"></span> <span>Session closed</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="component-block">
+      <h4>Alerts</h4>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="alert alert-success"><span class="alert-icon">✓</span><span>Attendance marked successfully at 9:07 AM</span></div>
+        <div class="alert alert-warning"><span class="alert-icon">⚠</span><span>Your DBMS attendance is below 75% — 12 classes needed</span></div>
+        <div class="alert alert-danger"><span class="alert-icon">✕</span><span>You are outside campus. Move to campus to mark attendance</span></div>
+        <div class="alert alert-info"><span class="alert-icon">ℹ</span><span>Session opens at 9:00 AM. Biometric device required</span></div>
+      </div>
+    </div>
+
+    <!-- Form Inputs -->
+    <div class="component-block">
+      <h4>Form Inputs</h4>
+      <div class="input-group"><label class="input-label">Email Address</label><input class="input" type="text" placeholder="sit24co042@sairamtap.edu.in" /></div>
+      <div class="input-group"><label class="input-label">Password</label><input class="input" type="password" placeholder="Enter your password" /></div>
+      <div class="input-group" style="margin-bottom:0"><label class="input-label">Select Class</label>
+        <select class="input"><option>CSE — Year 2 Section A</option><option>CSE — Year 3 Section B</option></select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stat cards + progress -->
+  <div class="component-block-full">
+    <h4>Stat Cards + Progress Bars</h4>
+    <div class="grid-3 mb-6">
+      <div class="stat-card"><div class="stat-label">Total Present</div><div class="stat-value">34</div><div class="stat-sub">out of 40 students</div></div>
+      <div class="stat-card"><div class="stat-label">Overall Attendance</div><div class="stat-value">86<span style="font-size:20px;color:var(--text-secondary)">%</span></div><div class="stat-sub" style="color:var(--success)">↑ Above 75% minimum</div></div>
+      <div class="stat-card"><div class="stat-label">Sessions Today</div><div class="stat-value">3</div><div class="stat-sub">2 closed · 1 open</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-bottom:6px"><span>Data Structures</span><span style="font-weight:600;color:var(--text-primary)">92%</span></div><div class="progress-wrap"><div class="progress-fill" style="width:92%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-bottom:6px"><span>DBMS</span><span style="font-weight:600;color:var(--warning)">68%</span></div><div class="progress-wrap progress-warning"><div class="progress-fill" style="width:68%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-bottom:6px"><span>Operating Systems</span><span style="font-weight:600;color:var(--success)">88%</span></div><div class="progress-wrap progress-success"><div class="progress-fill" style="width:88%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 3: PAGE FLOWS ─────────────────────────────────────────── -->
+  <div class="section-label">03 — Page Flows</div>
+  <div class="section-title">Routing & Navigation Map</div>
+  <div class="section-desc">Complete page tree for all three roles. Every route, every transition.</div>
+
+  <div class="component-block-full mb-6">
+    <h4>Student Pages — Mobile-First</h4>
+    <div class="flow-diagram">
+      <div class="flow-node"><div class="flow-box brand">Login</div><div class="flow-label">/login</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Dashboard</div><div class="flow-label">/student</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box brand">Mark Attendance</div><div class="flow-label">/student/attend</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box success">✓ Confirmed</div><div class="flow-label">inline state</div></div>
+    </div>
+    <div class="flow-diagram">
+      <div class="flow-node"><div class="flow-box">Dashboard</div><div class="flow-label">/student</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">My Subjects</div><div class="flow-label">/student/subjects</div></div>
+      <div class="flow-arrow" style="color:transparent">→</div>
+      <div class="flow-node"><div class="flow-box">Attendance History</div><div class="flow-label">/student/history</div></div>
+      <div class="flow-arrow" style="color:transparent">→</div>
+      <div class="flow-node"><div class="flow-box warning">Low % Warning</div><div class="flow-label">inline alert</div></div>
+    </div>
+  </div>
+
+  <div class="component-block-full mb-6">
+    <h4>HOD / Department Pages — Desktop Sidebar</h4>
+    <div class="flow-diagram" style="flex-wrap:wrap;row-gap:12px">
+      <div class="flow-node"><div class="flow-box brand">HOD Login</div><div class="flow-label">/login</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Dashboard</div><div class="flow-label">/hod</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Classes</div><div class="flow-label">/hod/classes</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Subjects</div><div class="flow-label">/hod/subjects</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Teachers</div><div class="flow-label">/hod/teachers</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Students</div><div class="flow-label">/hod/students</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Mappings</div><div class="flow-label">/hod/mappings</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Reports</div><div class="flow-label">/hod/reports</div></div>
+    </div>
+  </div>
+
+  <div class="component-block-full">
+    <h4>Teacher Pages — Desktop Sidebar</h4>
+    <div class="flow-diagram">
+      <div class="flow-node"><div class="flow-box brand">Teacher Login</div><div class="flow-label">/login</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Dashboard</div><div class="flow-label">/teacher</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">My Classes</div><div class="flow-label">/teacher/classes</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box brand">Live Session</div><div class="flow-label">/teacher/session/:id</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node"><div class="flow-box">Reports</div><div class="flow-label">/teacher/reports</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 4: PAGE VISUALIZATIONS ───────────────────────────────── -->
+  <div class="section-label">04 — Page Visualizations</div>
+  <div class="section-title">All Pages, All Roles</div>
+  <div class="section-desc">Interactive prototypes. Switch between pages using the tabs below.</div>
+
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="switchPage('login')">Login</button>
+    <button class="page-tab" onclick="switchPage('student')">Student Mobile</button>
+    <button class="page-tab" onclick="switchPage('hod')">HOD Dashboard</button>
+    <button class="page-tab" onclick="switchPage('teacher')">Teacher Live Session</button>
+  </div>
+
+  <!-- ── LOGIN PAGE ── -->
+  <div class="page-view active" id="page-login">
+    <div class="login-page">
+      <div class="login-left">
+        <div class="login-brand">
+          <div class="login-brand-logo">🎓</div>
+          <div class="login-brand-title">Attend<em>Guard</em></div>
+          <div class="login-brand-desc">Secure, hardware-free attendance for Sri Sairam Engineering College.</div>
+        </div>
+        <div class="login-features">
+          <div class="login-feature"><div class="login-feature-icon">👆</div>Biometric via device — no scanner needed</div>
+          <div class="login-feature"><div class="login-feature-icon">📍</div>GPS campus verification — no proxy possible</div>
+          <div class="login-feature"><div class="login-feature-icon">⚡</div>Mark attendance in under 10 seconds</div>
+          <div class="login-feature"><div class="login-feature-icon">🔐</div>One device per student — strictly enforced</div>
+        </div>
+      </div>
+      <div class="login-right">
+        <div class="login-title">Welcome back</div>
+        <div class="login-sub">Sign in to your account</div>
+        <div class="role-tabs">
+          <div class="role-tab active">👨‍🏫 HOD</div>
+          <div class="role-tab">👩‍🏫 Teacher</div>
+          <div class="role-tab">👨‍🎓 Student</div>
+        </div>
+        <div class="input-group"><label class="input-label">Email Address</label><input class="input" type="email" placeholder="hod.cse@sairamtap.edu.in" /></div>
+        <div class="input-group"><label class="input-label">Password</label><input class="input" type="password" placeholder="••••••••" /></div>
+        <button class="btn btn-primary btn-lg" style="width:100%;margin-top:8px">Sign In →</button>
+        <div style="margin-top:16px;font-size:12px;color:var(--text-tertiary);text-align:center">Biometric registration happens after first login</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STUDENT MOBILE ── -->
+  <div class="page-view" id="page-student">
+    <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
+
+      <!-- States switcher -->
+      <div>
+        <div class="state-tabs">
+          <button class="state-tab active" onclick="switchState(this,'s-idle')">Idle</button>
+          <button class="state-tab" onclick="switchState(this,'s-gps')">Getting GPS</button>
+          <button class="state-tab" onclick="switchState(this,'s-bio')">Biometric</button>
+          <button class="state-tab" onclick="switchState(this,'s-done')">Marked ✓</button>
+        </div>
+
+        <!-- STATE: IDLE -->
+        <div class="mobile-state active" id="s-idle">
+          <div class="mobile-frame">
+            <div class="mobile-notch"></div>
+            <div class="mobile-screen">
+              <div class="mobile-header">
+                <div>
+                  <div class="mobile-nav-title">Good morning, Naveen 👋</div>
+                  <div style="font-size:11px;color:var(--text-tertiary)">CSE · Year 2 · Section A</div>
+                </div>
+                <div class="avatar" style="background:var(--brand-50);color:var(--brand-600)">N</div>
+              </div>
+              <div class="mobile-content">
+                <!-- active class card -->
+                <div class="attend-card">
+                  <div class="attend-subject">CS301 · Now Live</div>
+                  <div class="attend-class">Data Structures</div>
+                  <div class="attend-meta">Prof. Meena R. · Room 204 · 9:00–9:50 AM</div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px">
+                    <div class="live-dot"></div>
+                    <span style="font-size:12px;color:var(--success);font-weight:500">Session Open</span>
+                    <span style="font-size:11px;color:var(--text-tertiary);font-family:var(--font-mono);margin-left:auto">08:43 left</span>
+                  </div>
+                  <button class="attend-btn-big" onclick="showBioFlow()">
+                    <span style="font-size:20px">👆</span>
+                    Mark Attendance
+                  </button>
+                </div>
+                <!-- mini stats -->
+                <div class="grid-2 mb-4" style="gap:8px">
+                  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px;text-align:center">
+                    <div style="font-family:var(--font-display);font-size:26px;color:var(--brand-500)">86%</div>
+                    <div style="font-size:10px;color:var(--text-tertiary);font-weight:500;text-transform:uppercase;letter-spacing:0.05em">Overall</div>
+                  </div>
+                  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px;text-align:center">
+                    <div style="font-family:var(--font-display);font-size:26px;color:var(--success)">4</div>
+                    <div style="font-size:10px;color:var(--text-tertiary);font-weight:500;text-transform:uppercase;letter-spacing:0.05em">Today</div>
+                  </div>
+                </div>
+                <!-- recent -->
+                <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:8px">Recent</div>
+                <div class="history-list">
+                  <div class="history-row"><div><div class="history-subj">Operating Systems</div><div class="history-time">Today 8:04 AM</div></div><span class="badge badge-present">Present</span></div>
+                  <div class="history-row"><div><div class="history-subj">DBMS</div><div class="history-time">Yesterday 11:10 AM</div></div><span class="badge badge-absent">Absent</span></div>
+                  <div class="history-row"><div><div class="history-subj">CN</div><div class="history-time">Yesterday 2:06 PM</div></div><span class="badge badge-present">Present</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: GPS -->
+        <div class="mobile-state" id="s-gps">
+          <div class="mobile-frame">
+            <div class="mobile-notch"></div>
+            <div class="mobile-screen">
+              <div class="mobile-header">
+                <div class="mobile-nav-title">Mark Attendance</div>
+              </div>
+              <div class="mobile-content">
+                <div class="attend-card">
+                  <div class="attend-subject">CS301 · Data Structures</div>
+                  <div class="attend-class" style="font-size:16px;margin-bottom:16px">Verifying your presence...</div>
+                  <div class="step-list">
+                    <div class="step-item done"><span class="step-icon">✓</span><span class="step-text">Session is open</span><span class="step-status" style="color:var(--success)">OK</span></div>
+                    <div class="step-item active"><span class="step-icon">📍</span><span class="step-text">Getting GPS location</span><span class="step-status" style="color:var(--info)">...</span></div>
+                    <div class="step-item waiting"><span class="step-icon">👆</span><span class="step-text">Biometric check</span><span class="step-status">Waiting</span></div>
+                  </div>
+                  <div class="alert alert-info mt-4" style="font-size:12px"><span class="alert-icon">📍</span>Allow location access when browser asks</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: BIOMETRIC -->
+        <div class="mobile-state" id="s-bio">
+          <div class="mobile-frame">
+            <div class="mobile-notch"></div>
+            <div class="mobile-screen">
+              <div class="mobile-header">
+                <div class="mobile-nav-title">Mark Attendance</div>
+              </div>
+              <div class="mobile-content">
+                <div class="attend-card">
+                  <div class="attend-subject">CS301 · Data Structures</div>
+                  <div class="attend-class" style="font-size:16px;margin-bottom:16px">Almost there...</div>
+                  <div class="step-list">
+                    <div class="step-item done"><span class="step-icon">✓</span><span class="step-text">Session is open</span><span class="step-status" style="color:var(--success)">OK</span></div>
+                    <div class="step-item done"><span class="step-icon">✓</span><span class="step-text">Inside campus (42 m)</span><span class="step-status" style="color:var(--success)">OK</span></div>
+                    <div class="step-item active"><span class="step-icon">👆</span><span class="step-text">Touch ID / Face ID</span><span class="step-status" style="color:var(--info)">Waiting...</span></div>
+                  </div>
+                  <div style="text-align:center;margin-top:20px">
+                    <div style="width:72px;height:72px;background:var(--brand-50);border:2px dashed var(--brand-200);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:32px">👆</div>
+                    <div style="font-size:12px;color:var(--text-secondary)">Your device will prompt for fingerprint or Face ID</div>
+                    <div style="font-size:11px;color:var(--text-tertiary);margin-top:4px;font-family:var(--font-mono)">Biometric data never leaves your device</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATE: DONE -->
+        <div class="mobile-state" id="s-done">
+          <div class="mobile-frame">
+            <div class="mobile-notch"></div>
+            <div class="mobile-screen">
+              <div class="mobile-header">
+                <div class="mobile-nav-title">Mark Attendance</div>
+              </div>
+              <div class="mobile-content">
+                <div class="success-card">
+                  <div class="success-icon-ring">✓</div>
+                  <div class="success-title">Attendance Marked!</div>
+                  <div class="success-sub">CS301 · Today 9:07 AM · 42m from campus</div>
+                </div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin:16px 0 8px">Updated Attendance</div>
+                <div class="history-list">
+                  <div class="history-row"><div><div class="history-subj">Data Structures</div><div class="history-time">Just now · 9:07 AM</div></div><span class="badge badge-present">Present</span></div>
+                  <div class="history-row"><div><div class="history-subj">Operating Systems</div><div class="history-time">Today 8:04 AM</div></div><span class="badge badge-present">Present</span></div>
+                  <div class="history-row"><div><div class="history-subj">DBMS</div><div class="history-time">Yesterday</div></div><span class="badge badge-absent">Absent</span></div>
+                </div>
+                <div class="alert alert-warning mt-4" style="font-size:12px"><span class="alert-icon">⚠</span>DBMS at 68% — attend 4 more classes to reach 75%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- explanation panel -->
+      <div style="flex:1;min-width:260px">
+        <div class="card mb-4">
+          <div style="font-size:11px;font-family:var(--font-mono);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)">Attendance Button Flow</div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--brand-500);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">1</div>
+              <div><div style="font-weight:600;font-size:13.5px">Student taps "Mark Attendance"</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Single big button. No step selection. No confusion.</div></div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--brand-500);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">2</div>
+              <div><div style="font-weight:600;font-size:13.5px">Browser requests GPS</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px">Haversine check: must be within 151.75m of campus. If outside → blocked with error.</div></div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--brand-500);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">3</div>
+              <div><div style="font-weight:600;font-size:13.5px">Device biometric fires</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px">navigator.credentials.get() — browser shows fingerprint/Face ID. Only registered device works.</div></div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--success);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✓</div>
+              <div><div style="font-weight:600;font-size:13.5px">Attendance confirmed</div><div style="font-size:12px;color:var(--text-secondary);margin-top:2px">DB updates ABSENT → PRESENT. Timestamp + GPS distance logged.</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:11px;font-family:var(--font-mono);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)">Device Registration (First Time)</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+            First login → prompt appears asking to register biometric device.<br><br>
+            <span style="font-family:var(--font-mono);font-size:11px;color:var(--brand-600)">navigator.credentials.create()</span><br><br>
+            Credential saved to user's <span style="font-family:var(--font-mono);font-size:11px;color:var(--brand-600)">devices[]</span> array in DB. Only one device allowed. Second device attempt → blocked with message: <em>"Device already registered. Contact HOD to reset."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HOD DASHBOARD ── -->
+  <div class="page-view" id="page-hod">
+    <div class="app-shell">
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark">A</div>
+          <div>
+            <div class="logo-text">AttendGuard</div>
+            <div class="logo-sub">HOD Portal</div>
+          </div>
+        </div>
+        <div class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <div class="nav-item active"><span class="nav-icon">⊞</span>Dashboard</div>
+          <div class="nav-item"><span class="nav-icon">📅</span>Sessions<span class="nav-badge">1</span></div>
+          <div class="nav-section-label" style="margin-top:8px">Manage</div>
+          <div class="nav-item"><span class="nav-icon">🏫</span>Classes</div>
+          <div class="nav-item"><span class="nav-icon">📚</span>Subjects</div>
+          <div class="nav-item"><span class="nav-icon">👩‍🏫</span>Teachers</div>
+          <div class="nav-item"><span class="nav-icon">👨‍🎓</span>Students</div>
+          <div class="nav-item"><span class="nav-icon">🔗</span>Mappings</div>
+          <div class="nav-section-label" style="margin-top:8px">Reports</div>
+          <div class="nav-item"><span class="nav-icon">📊</span>Attendance</div>
+          <div class="nav-item"><span class="nav-icon">⚠</span>Low Attendance</div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="user-card">
+            <div class="avatar" style="background:var(--brand-50);color:var(--brand-600);font-size:14px">H</div>
+            <div><div class="user-name">Dr. Meena R.</div><div class="user-role">HOD · CSE Dept</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="main-content">
+        <div class="topbar">
+          <div><div class="page-title">Dashboard</div><div class="page-sub">Thursday, March 7 · CSE Department</div></div>
+          <div class="topbar-actions">
+            <button class="btn btn-primary btn-sm">+ Open Session</button>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-label">Students</div><div class="stat-value" style="font-size:28px">240</div><div class="stat-sub">Across 6 classes</div></div>
+          <div class="stat-card"><div class="stat-label">Present Today</div><div class="stat-value" style="font-size:28px;color:var(--success)">198</div><div class="stat-sub" style="color:var(--success)">82.5% rate</div></div>
+          <div class="stat-card"><div class="stat-label">Live Sessions</div><div class="stat-value" style="font-size:28px;color:var(--info)">1</div><div class="stat-sub">Data Structures open</div></div>
+          <div class="stat-card"><div class="stat-label">Low Attendance</div><div class="stat-value" style="font-size:28px;color:var(--warning)">12</div><div class="stat-sub" style="color:var(--warning)">Below 75%</div></div>
+        </div>
+
+        <!-- live sessions -->
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:10px">Active Sessions</div>
+        <div class="session-row">
+          <div class="live-dot"></div>
+          <div><div class="session-subject">Data Structures & Algorithms</div><div class="session-meta">Year 2 · Sec A · Prof. Meena R. · Opened 9:00 AM</div></div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:var(--success);background:var(--success-bg);padding:4px 10px;border-radius:var(--r-full);border:1px solid var(--success-border)">34 / 40</div>
+          <div class="session-actions">
+            <button class="btn btn-danger btn-sm">Close</button>
+          </div>
+        </div>
+
+        <!-- recent students -->
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin:16px 0 10px">Recent Attendance</div>
+        <table class="data-table">
+          <thead><tr><th>Student</th><th>Subject</th><th>Time</th><th>GPS</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:var(--brand-50);color:var(--brand-600);font-size:11px">A</div>Arun Kumar</div></td><td>Data Structures</td><td style="font-family:var(--font-mono);font-size:12px">9:04 AM</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--success)">42 m</td><td><span class="badge badge-present">Present</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:#FFF1F2;color:var(--danger);font-size:11px">D</div>Divya P.</div></td><td>Data Structures</td><td style="font-family:var(--font-mono);font-size:12px">9:06 AM</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--success)">78 m</td><td><span class="badge badge-present">Present</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:#FFF7ED;color:var(--warning);font-size:11px">K</div>Karthik R.</div></td><td>Data Structures</td><td style="font-family:var(--font-mono);font-size:12px">—</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--text-tertiary)">—</td><td><span class="badge badge-absent">Absent</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TEACHER LIVE SESSION ── -->
+  <div class="page-view" id="page-teacher">
+    <div class="app-shell">
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-mark" style="background:var(--success)">T</div>
+          <div>
+            <div class="logo-text">AttendGuard</div>
+            <div class="logo-sub">Teacher Portal</div>
+          </div>
+        </div>
+        <div class="sidebar-nav">
+          <div class="nav-section-label">Main</div>
+          <div class="nav-item"><span class="nav-icon">⊞</span>Dashboard</div>
+          <div class="nav-item active"><span class="nav-icon">⚡</span>Live Session<span class="nav-badge">1</span></div>
+          <div class="nav-section-label" style="margin-top:8px">My Classes</div>
+          <div class="nav-item"><span class="nav-icon">📘</span>Data Structures</div>
+          <div class="nav-item"><span class="nav-icon">📗</span>Computer Networks</div>
+          <div class="nav-section-label" style="margin-top:8px">Reports</div>
+          <div class="nav-item"><span class="nav-icon">📊</span>My Reports</div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="user-card">
+            <div class="avatar" style="background:#F0FDF4;color:var(--success);font-size:14px">M</div>
+            <div><div class="user-name">Prof. Meena R.</div><div class="user-role">Teacher · CSE</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="main-content">
+        <div class="topbar">
+          <div><div class="page-title">Live Session</div><div class="page-sub">Data Structures · Year 2 Sec A</div></div>
+          <div class="topbar-actions">
+            <button class="btn btn-danger btn-sm">⏹ Close Session</button>
+          </div>
+        </div>
+
+        <!-- Live banner -->
+        <div class="live-session-banner">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><div class="live-dot"></div><span style="font-size:11px;font-weight:600;color:var(--success);font-family:var(--font-mono)">LIVE · OPEN</span></div>
+            <div class="live-session-info"><div class="session-name">Data Structures & Algorithms</div><div class="session-detail">CS301 · Room 204 · Opened 9:00 AM · Closes 9:10 AM</div></div>
+          </div>
+          <div class="live-count">
+            <div class="count-num">34</div>
+            <div class="count-label">Present so far</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:var(--font-mono);font-size:28px;font-weight:500;color:var(--warning)">02:18</div>
+            <div style="font-size:11px;color:var(--text-tertiary)">Time remaining</div>
+          </div>
+        </div>
+
+        <!-- stats row -->
+        <div class="stats-row stats-row-3" style="margin-bottom:20px">
+          <div class="stat-card"><div class="stat-label">Present</div><div class="stat-value" style="font-size:28px;color:var(--success)">34</div><div style="margin-top:8px"><div class="progress-wrap progress-success"><div class="progress-fill" style="width:85%"></div></div></div></div>
+          <div class="stat-card"><div class="stat-label">Absent</div><div class="stat-value" style="font-size:28px;color:var(--danger)">6</div><div style="font-size:12px;color:var(--text-secondary);margin-top:6px">Out of 40 students</div></div>
+          <div class="stat-card"><div class="stat-label">Session Rate</div><div class="stat-value" style="font-size:28px">85%</div><div style="font-size:12px;color:var(--success);margin-top:6px">↑ Good turnout</div></div>
+        </div>
+
+        <!-- attendance list -->
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:10px">Student Roll</div>
+        <table class="data-table">
+          <thead><tr><th>Student</th><th>Roll No.</th><th>Marked At</th><th>Distance</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:var(--brand-50);color:var(--brand-600);font-size:11px">A</div>Arun Kumar</div></td><td style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">CSE2021001</td><td style="font-family:var(--font-mono);font-size:12px">9:04 AM</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--success)">42 m</td><td><span class="badge badge-present">Present</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:#FFF0F3;color:var(--danger);font-size:11px">D</div>Divya Priya</div></td><td style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">CSE2021002</td><td style="font-family:var(--font-mono);font-size:12px">9:06 AM</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--success)">78 m</td><td><span class="badge badge-present">Present</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:#FFF7ED;color:var(--warning);font-size:11px">K</div>Karthik R.</div></td><td style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">CSE2021003</td><td style="font-family:var(--font-mono);font-size:12px">—</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--text-tertiary)">—</td><td><span class="badge badge-absent">Absent</span></td></tr>
+            <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;background:var(--brand-50);color:var(--brand-600);font-size:11px">M</div>Meena S.</div></td><td style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary)">CSE2021004</td><td style="font-family:var(--font-mono);font-size:12px">9:03 AM</td><td style="font-family:var(--font-mono);font-size:11px;color:var(--success)">19 m</td><td><span class="badge badge-present">Present</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ─── SECTION 5: COMPONENT MAP ─────────────────────────────────────── -->
+  <div class="section-label">05 — Build Reference</div>
+  <div class="section-title">React Component Map</div>
+  <div class="section-desc">Every component you need to build, organized by category. Reuse aggressively.</div>
+
+  <div class="component-block-full">
+    <h4>Component Inventory</h4>
+    <div class="grid-3">
+      <div>
+        <div style="font-weight:600;font-size:13px;color:var(--text-primary);margin-bottom:10px">🧱 Atoms</div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--text-secondary)">
+          <span>Button (5 variants · 3 sizes)</span>
+          <span>Badge (5 variants)</span>
+          <span>Input / Select</span>
+          <span>Avatar</span>
+          <span>StatusDot</span>
+          <span>ProgressBar</span>
+          <span>LiveDot (animated)</span>
+          <span>Spinner</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:13px;color:var(--text-primary);margin-bottom:10px">🧩 Molecules</div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--text-secondary)">
+          <span>StatCard</span>
+          <span>Alert</span>
+          <span>SessionRow</span>
+          <span>HistoryRow</span>
+          <span>StepItem (GPS / Bio / Done)</span>
+          <span>AttendanceRow (table)</span>
+          <span>PercentageRing</span>
+          <span>NavItem</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:13px;color:var(--text-primary);margin-bottom:10px">🏗 Organisms / Pages</div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--text-secondary)">
+          <span>Sidebar (collapsible)</span>
+          <span>LoginPage (role tabs)</span>
+          <span>MarkAttendanceCard</span>
+          <span>LiveSessionBanner</span>
+          <span>AttendanceTable</span>
+          <span>HODDashboard</span>
+          <span>TeacherLiveSession</span>
+          <span>StudentDashboard</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:48px 0 0;font-family:var(--font-mono);font-size:12px;color:var(--text-tertiary)">
+    AttendGuard Design System v1.0 — Built for NAVEENKUMAR T · Sri Sairam Engineering College
+  </div>
+
+</div>
+
+<script>
+function switchPage(name) {
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function switchState(btn, stateId) {
+  document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mobile-state').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(stateId).classList.add('active');
+}
+
+function showBioFlow() {
+  document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mobile-state').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.state-tab')[1].classList.add('active');
+  document.getElementById('s-gps').classList.add('active');
+  setTimeout(() => {
+    document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.mobile-state').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.state-tab')[2].classList.add('active');
+    document.getElementById('s-bio').classList.add('active');
+    setTimeout(() => {
+      document.querySelectorAll('.state-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.mobile-state').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.state-tab')[3].classList.add('active');
+      document.getElementById('s-done').classList.add('active');
+    }, 2000);
+  }, 2000);
+}
+</script>
+</body>
+</html>
