@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser';
-import api from '../../utils/api';
+import { getStudentDashboard, markStudentAttendance, webauthnRegisterOptions, webauthnRegisterVerify, webauthnAuthOptions } from '../../utils/api';
 import useAuthStore from '../../store/authStore';
 import { FiSmartphone, FiMapPin, FiCheckCircle, FiXCircle, FiCalendar, FiAlertTriangle, FiLogOut, FiLoader } from 'react-icons/fi';
 
@@ -16,7 +16,7 @@ const StudentDashboard = () => {
     const [regMsg, setRegMsg] = useState('');
 
     const loadDashboard = () => {
-        api.get('/student/dashboard').then(r => { setData(r.data); setLoading(false); }).catch(() => setLoading(false));
+        getStudentDashboard().then(r => { setData(r.data); setLoading(false); }).catch(() => setLoading(false));
     };
 
     useEffect(() => { loadDashboard(); }, []);
@@ -25,9 +25,9 @@ const StudentDashboard = () => {
     const registerDevice = async () => {
         try {
             setRegMsg('Starting registration...');
-            const optionsRes = await api.post('/webauthn/register-options');
+            const optionsRes = await webauthnRegisterOptions();
             const attResp = await startRegistration({ optionsJSON: optionsRes.data });
-            const verifyRes = await api.post('/webauthn/register-verify', attResp);
+            const verifyRes = await webauthnRegisterVerify(attResp);
             if (verifyRes.data.verified) {
                 setRegMsg('✓ Device registered successfully!');
                 setShowRegister(false);
@@ -58,11 +58,11 @@ const StudentDashboard = () => {
 
             // 2. Get WebAuthn challenge
             setMarkingState('bio');
-            const authOptions = await api.post('/webauthn/auth-options');
+            const authOptions = await webauthnAuthOptions();
             const authResp = await startAuthentication({ optionsJSON: authOptions.data });
 
             // 3. Mark attendance
-            const result = await api.post('/student/attendance/mark', {
+            const result = await markStudentAttendance({
                 sessionId,
                 latitude,
                 longitude,

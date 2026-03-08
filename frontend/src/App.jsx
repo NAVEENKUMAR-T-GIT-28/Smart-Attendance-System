@@ -22,7 +22,7 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Smart-Attendance-System">
       <Routes>
         {/* Login */}
         <Route path="/login" element={<LoginPage />} />

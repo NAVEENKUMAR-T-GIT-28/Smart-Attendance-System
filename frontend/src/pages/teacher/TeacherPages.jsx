@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import api from '../../utils/api';
+import { getTeacherDashboard, getTeacherClasses, teacherStartSession, teacherCloseSession, getSessionAttendance, getTeacherReports } from '../../utils/api';
 import { FiHome, FiZap, FiBook, FiBarChart2, FiPlay } from 'react-icons/fi';
 
 const teacherNavItems = [
@@ -43,7 +43,7 @@ export const TeacherDashboard = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        api.get('/teacher/dashboard').then(r => { setData(r.data); setLoading(false); }).catch(() => setLoading(false));
+        getTeacherDashboard().then(r => { setData(r.data); setLoading(false); }).catch(() => setLoading(false));
     }, []);
 
     if (loading) return <div className="text-center mt-6"><div className="spinner" style={{ margin: '40px auto' }}></div></div>;
@@ -117,7 +117,7 @@ export const MyClasses = () => {
     const [mappings, setMappings] = useState([]);
 
     useEffect(() => {
-        api.get('/teacher/classes').then(r => setMappings(r.data));
+        getTeacherClasses().then(r => setMappings(r.data));
     }, []);
 
     return (
@@ -152,8 +152,8 @@ export const LiveSession = () => {
     const [msg, setMsg] = useState('');
 
     useEffect(() => {
-        api.get('/teacher/classes').then(r => setMappings(r.data));
-        api.get('/teacher/dashboard').then(r => {
+        getTeacherClasses().then(r => setMappings(r.data));
+        getTeacherDashboard().then(r => {
             const active = r.data.activeSessions;
             if (active && active.length > 0) {
                 setSession(active[0]);
@@ -165,7 +165,7 @@ export const LiveSession = () => {
     const startSession = async (e) => {
         e.preventDefault();
         try {
-            const res = await api.post('/teacher/session/start', form);
+            const res = await teacherStartSession(form);
             setSession(res.data.session);
             setMsg(`Session opened! ${res.data.studentsEnrolled} students.`);
             loadAttendance(res.data.session._id);
@@ -173,13 +173,13 @@ export const LiveSession = () => {
     };
 
     const loadAttendance = async (sessionId) => {
-        const res = await api.get(`/teacher/session/${sessionId}/attendance`);
+        const res = await getSessionAttendance(sessionId);
         setAttendance(res.data);
     };
 
     const closeSession = async () => {
         try {
-            await api.put(`/teacher/session/${session._id}/close`);
+            await teacherCloseSession(session._id);
             setSession(null);
             setMsg('Session closed.');
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
@@ -291,7 +291,7 @@ export const TeacherReports = () => {
     const [reports, setReports] = useState([]);
 
     useEffect(() => {
-        api.get('/teacher/reports').then(r => setReports(r.data));
+        getTeacherReports().then(r => setReports(r.data));
     }, []);
 
     return (

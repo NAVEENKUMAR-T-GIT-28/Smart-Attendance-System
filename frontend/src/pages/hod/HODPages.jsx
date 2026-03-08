@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
-import api from '../../utils/api';
+import { getHodDashboard, getClasses, createClass, deleteClass, getSubjects, createSubject, deleteSubject, getUsers, addUser, deleteUser, getMappings, createMapping, deleteMapping, getEnrollments, createEnrollment, deleteEnrollment, hodStartSession, hodCloseSession, getAttendanceReport } from '../../utils/api';
 import { FiHome, FiCalendar, FiGrid, FiBook, FiUsers, FiUserCheck, FiLink, FiClipboard, FiBarChart2, FiPlay } from 'react-icons/fi';
 
 const hodNavItems = [
@@ -48,7 +48,7 @@ export const HODDashboard = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        api.get('/hod/dashboard').then(r => { setStats(r.data); setLoading(false); }).catch(() => setLoading(false));
+        getHodDashboard().then(r => { setStats(r.data); setLoading(false); }).catch(() => setLoading(false));
     }, []);
 
     if (loading) return <div className="text-center mt-6"><div className="spinner" style={{ margin: '40px auto' }}></div></div>;
@@ -97,13 +97,13 @@ export const ManageClasses = () => {
     const [section, setSection] = useState('A');
     const [msg, setMsg] = useState('');
 
-    const load = () => api.get('/hod/classes').then(r => setClasses(r.data));
+    const load = () => getClasses().then(r => setClasses(r.data));
     useEffect(() => { load(); }, []);
 
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/hod/classes', { year: Number(year), section });
+            await createClass({ year: Number(year), section });
             setMsg('Class created!');
             load();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
@@ -111,7 +111,7 @@ export const ManageClasses = () => {
 
     const handleDelete = async (id) => {
         if (confirm('Delete this class?')) {
-            await api.delete(`/hod/classes/${id}`);
+            await deleteClass(id);
             load();
         }
     };
@@ -171,13 +171,13 @@ export const ManageSubjects = () => {
     const [code, setCode] = useState('');
     const [msg, setMsg] = useState('');
 
-    const load = () => api.get('/hod/subjects').then(r => setSubjects(r.data));
+    const load = () => getSubjects().then(r => setSubjects(r.data));
     useEffect(() => { load(); }, []);
 
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/hod/subjects', { name, code });
+            await createSubject({ name, code });
             setMsg('Subject created!'); setName(''); setCode('');
             load();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
@@ -212,7 +212,7 @@ export const ManageSubjects = () => {
                             <tr key={s._id}>
                                 <td style={{ fontFamily: 'var(--font-mono)', color: 'var(--brand-600)' }}>{s.code}</td>
                                 <td style={{ fontWeight: 600 }}>{s.name}</td>
-                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await api.delete(`/hod/subjects/${s._id}`); load(); }}>Delete</button></td>
+                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await deleteSubject(s._id); load(); }}>Delete</button></td>
                             </tr>
                         ))}
                         {subjects.length === 0 && <tr><td colSpan={3} style={{ textAlign: 'center', color: 'var(--text-tertiary)' }}>No subjects yet.</td></tr>}
@@ -230,13 +230,13 @@ export const ManageTeachers = () => {
     const [msg, setMsg] = useState('');
     const [showForm, setShowForm] = useState(false);
 
-    const load = () => api.get('/hod/users?role=teacher').then(r => setUsers(r.data));
+    const load = () => getUsers('teacher').then(r => setUsers(r.data));
     useEffect(() => { load(); }, []);
 
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/hod/users', { ...form, role: 'teacher' });
+            await addUser({ ...form, role: 'teacher' });
             setMsg('Teacher added!'); setForm({ name: '', email: '', password: '', staffId: '' }); setShowForm(false);
             load();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
@@ -276,7 +276,7 @@ export const ManageTeachers = () => {
                                 <td><div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><div className="avatar" style={{ width: '28px', height: '28px', background: 'var(--brand-50)', color: 'var(--brand-600)', fontSize: '11px' }}>{u.name?.charAt(0)}</div>{u.name}</div></td>
                                 <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{u.email}</td>
                                 <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{u.staffId || '—'}</td>
-                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await api.delete(`/hod/users/${u._id}`); load(); }}>Delete</button></td>
+                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await deleteUser(u._id); load(); }}>Delete</button></td>
                             </tr>
                         ))}
                     </tbody>
@@ -293,13 +293,13 @@ export const ManageStudents = () => {
     const [msg, setMsg] = useState('');
     const [showForm, setShowForm] = useState(false);
 
-    const load = () => api.get('/hod/users?role=student').then(r => setUsers(r.data));
+    const load = () => getUsers('student').then(r => setUsers(r.data));
     useEffect(() => { load(); }, []);
 
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/hod/users', { ...form, role: 'student' });
+            await addUser({ ...form, role: 'student' });
             setMsg('Student added!'); setForm({ name: '', email: '', password: '', registerNumber: '' }); setShowForm(false);
             load();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
@@ -339,7 +339,7 @@ export const ManageStudents = () => {
                                 <td><div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><div className="avatar" style={{ width: '28px', height: '28px', background: 'var(--brand-50)', color: 'var(--brand-600)', fontSize: '11px' }}>{u.name?.charAt(0)}</div>{u.name}</div></td>
                                 <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{u.email}</td>
                                 <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{u.registerNumber || '—'}</td>
-                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await api.delete(`/hod/users/${u._id}`); load(); }}>Delete</button></td>
+                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await deleteUser(u._id); load(); }}>Delete</button></td>
                             </tr>
                         ))}
                     </tbody>
@@ -359,17 +359,17 @@ export const Mappings = () => {
     const [msg, setMsg] = useState('');
 
     const load = () => {
-        api.get('/hod/mappings').then(r => setMappings(r.data));
-        api.get('/hod/users?role=teacher').then(r => setTeachers(r.data));
-        api.get('/hod/classes').then(r => setClasses(r.data));
-        api.get('/hod/subjects').then(r => setSubjects(r.data));
+        getMappings().then(r => setMappings(r.data));
+        getUsers('teacher').then(r => setTeachers(r.data));
+        getClasses().then(r => setClasses(r.data));
+        getSubjects().then(r => setSubjects(r.data));
     };
     useEffect(() => { load(); }, []);
 
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/hod/mappings', form);
+            await createMapping(form);
             setMsg('Mapping created!'); load();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
     };
@@ -417,7 +417,7 @@ export const Mappings = () => {
                                 <td style={{ fontWeight: 600 }}>{m.teacherId?.name}</td>
                                 <td>{m.classId?.label}</td>
                                 <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--brand-600)' }}>{m.subjectId?.code} — {m.subjectId?.name}</td>
-                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await api.delete(`/hod/mappings/${m._id}`); load(); }}>Delete</button></td>
+                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await deleteMapping(m._id); load(); }}>Delete</button></td>
                             </tr>
                         ))}
                     </tbody>
@@ -437,17 +437,17 @@ export const Enrollments = () => {
     const [msg, setMsg] = useState('');
 
     const load = () => {
-        api.get('/hod/enrollments').then(r => setEnrollments(r.data));
-        api.get('/hod/users?role=student').then(r => setStudents(r.data));
-        api.get('/hod/classes').then(r => setClasses(r.data));
-        api.get('/hod/subjects').then(r => setSubjects(r.data));
+        getEnrollments().then(r => setEnrollments(r.data));
+        getUsers('student').then(r => setStudents(r.data));
+        getClasses().then(r => setClasses(r.data));
+        getSubjects().then(r => setSubjects(r.data));
     };
     useEffect(() => { load(); }, []);
 
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/hod/enrollments', form);
+            await createEnrollment(form);
             setMsg('Enrolled!'); load();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
     };
@@ -510,7 +510,7 @@ export const Enrollments = () => {
                                 <td style={{ fontWeight: 600 }}>{e.studentId?.name}</td>
                                 <td>{e.classId?.label}</td>
                                 <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--brand-600)' }}>{e.subjectId?.code}</td>
-                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await api.delete(`/hod/enrollments/${e._id}`); load(); }}>Delete</button></td>
+                                <td><button className="btn btn-danger btn-sm" onClick={async () => { await deleteEnrollment(e._id); load(); }}>Delete</button></td>
                             </tr>
                         ))}
                     </tbody>
@@ -530,20 +530,20 @@ export const Sessions = () => {
     const [activeSessions, setActiveSessions] = useState([]);
 
     const loadSessions = () => {
-        api.get('/hod/dashboard').then(r => setActiveSessions(r.data.liveSessionDetails || []));
+        getHodDashboard().then(r => setActiveSessions(r.data.liveSessionDetails || []));
     };
 
     useEffect(() => {
-        api.get('/hod/classes').then(r => setClasses(r.data));
-        api.get('/hod/subjects').then(r => setSubjects(r.data));
-        api.get('/hod/users?role=teacher').then(r => setTeachers(r.data));
+        getClasses().then(r => setClasses(r.data));
+        getSubjects().then(r => setSubjects(r.data));
+        getUsers('teacher').then(r => setTeachers(r.data));
         loadSessions();
     }, []);
 
     const startSession = async (e) => {
         e.preventDefault();
         try {
-            const res = await api.post('/hod/session/start', form);
+            const res = await hodStartSession(form);
             setMsg(`Session opened! ${res.data.studentsEnrolled} students enrolled.`);
             loadSessions();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
@@ -551,7 +551,7 @@ export const Sessions = () => {
 
     const closeSession = async (id) => {
         try {
-            await api.put(`/hod/session/${id}/close`);
+            await hodCloseSession(id);
             setMsg('Session closed.');
             loadSessions();
         } catch (err) { setMsg(err.response?.data?.message || 'Error'); }
@@ -620,7 +620,7 @@ export const Reports = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        api.get('/hod/attendance/report').then(r => { setRecords(r.data); setLoading(false); }).catch(() => setLoading(false));
+        getAttendanceReport().then(r => { setRecords(r.data); setLoading(false); }).catch(() => setLoading(false));
     }, []);
 
     if (loading) return <div className="text-center mt-6"><div className="spinner" style={{ margin: '40px auto' }}></div></div>;

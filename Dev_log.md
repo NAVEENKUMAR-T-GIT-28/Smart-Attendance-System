@@ -465,6 +465,8 @@ During testing and deployment, several edge cases were resolved to ensure robust
     - **v13:** `registrationInfo.credential.id` (base64url string), `registrationInfo.credential.publicKey` (Uint8Array), `credential: { ... }` for auth verify.
     - This mismatch caused `Buffer.from(undefined)` and `input.replace is not a function` crashes. Resolved by reading the actual v13 library source code and rewriting `webauthnController.js` to use the correct v13 data structures. Passkey creation and biometric authentication now work correctly on mobile devices over ngrok. ✅
 
+14. **Centralized API Layer Refactor (March 8, 2026):** Moved all inline `api.get()`/`api.post()`/`api.put()`/`api.delete()` calls from page components into `src/utils/api.js` as **31 named export functions** (e.g., `loginUser`, `getHodDashboard`, `createClass`, `teacherStartSession`, `markStudentAttendance`, `webauthnRegisterOptions`, etc.). Updated all 4 page files (`LoginPage.jsx`, `HODPages.jsx`, `TeacherPages.jsx`, `StudentPages.jsx`) to import and use these centralized functions. Pattern matches the HostelOs project API structure for consistency.
+
 ---
 
 *AttendGuard — Built by NAVEENKUMAR T · Sri Sairam Engineering College · March 2026*

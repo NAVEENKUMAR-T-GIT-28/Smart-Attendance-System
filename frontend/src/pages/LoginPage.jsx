@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../utils/api';
+import { loginUser } from '../utils/api';
 import useAuthStore from '../store/authStore';
 import { FiShield, FiUser, FiUsers, FiSmartphone, FiMapPin, FiZap, FiLock, FiEye, FiEyeOff, FiAlertCircle } from 'react-icons/fi';
 
@@ -20,7 +20,7 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            const res = await api.post('/auth/login', { email, password, role });
+            const res = await loginUser({ email, password, role });
             login(res.data.token, res.data.user);
 
             if (role === 'hod') navigate('/hod');

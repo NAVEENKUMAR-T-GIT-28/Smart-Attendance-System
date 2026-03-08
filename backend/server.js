@@ -15,6 +15,31 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.send('Smart attendance system backend is running');
+});
+
+// Request and Response Logging Middleware
+app.use((req, res, next) => {
+    const start = Date.now();
+    console.log(`\n[Backend API] -----> ${req.method} ${req.url}`);
+
+    // Log body safely
+    if (req.body && Object.keys(req.body).length > 0) {
+        const safeBody = { ...req.body };
+        if (safeBody.password) safeBody.password = '[HIDDEN]';
+        console.log(`[Backend API] Body:`, safeBody);
+    }
+
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        const color = res.statusCode >= 400 ? '\\x1b[31m' : '\\x1b[32m'; // Red for errors, green for success
+        console.log(`${color}[Backend API] <----- ${req.method} ${req.url} - Status: ${res.statusCode} (${duration}ms)\\x1b[0m`);
+    });
+
+    next();
+});
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/webauthn', require('./routes/webauthn'));
