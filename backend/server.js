@@ -8,11 +8,31 @@ connectDB();
 
 const app = express();
 
-// Middleware
+// Allowed origins for CORS (comma-separated in env, fallback to localhost)
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+    : ['http://localhost:5173'];
+
 app.use(cors({
-    origin: process.env.ORIGIN || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true
 }));
+
+// CORS error handler
+app.use((err, req, res, next) => {
+    if (err.message === 'Not allowed by CORS') {
+        return res.status(403).json({ error: 'CORS blocked request' });
+    }
+    next(err);
+});
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -33,8 +53,8 @@ app.use((req, res, next) => {
 
     res.on('finish', () => {
         const duration = Date.now() - start;
-        const color = res.statusCode >= 400 ? '\\x1b[31m' : '\\x1b[32m'; // Red for errors, green for success
-        console.log(`${color}[Backend API] <----- ${req.method} ${req.url} - Status: ${res.statusCode} (${duration}ms)\\x1b[0m`);
+        const status = res.statusCode >= 400 ? 'ERR' : 'OK';
+        console.log(`[Backend API] <----- ${req.method} ${req.url} - ${status} ${res.statusCode} (${duration}ms)`);
     });
 
     next();
@@ -50,6 +70,12 @@ app.use('/api/student', require('./routes/student'));
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error('[Backend ERROR]', err);
+    res.status(500).json({ error: 'Internal server error' });
 });
 
 const PORT = process.env.PORT || 5000;

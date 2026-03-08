@@ -467,6 +467,17 @@ During testing and deployment, several edge cases were resolved to ensure robust
 
 14. **Centralized API Layer Refactor (March 8, 2026):** Moved all inline `api.get()`/`api.post()`/`api.put()`/`api.delete()` calls from page components into `src/utils/api.js` as **31 named export functions** (e.g., `loginUser`, `getHodDashboard`, `createClass`, `teacherStartSession`, `markStudentAttendance`, `webauthnRegisterOptions`, etc.). Updated all 4 page files (`LoginPage.jsx`, `HODPages.jsx`, `TeacherPages.jsx`, `StudentPages.jsx`) to import and use these centralized functions. Pattern matches the HostelOs project API structure for consistency.
 
+15. **BrowserRouter Basename Fix (March 8, 2026):** Fixed a critical routing bug where all HOD sub-pages (`/hod/classes`, `/hod/subjects`, etc.) loaded only the Dashboard. Root cause: `vite.config.js` had `base: "/Smart-Attendance-System/"` while `App.jsx` also hardcoded `/Smart-Attendance-System/` in every route path, causing React Router to fail nested route matching. Fix: added `basename="/Smart-Attendance-System"` to `<BrowserRouter>` and removed the manual prefix from all route paths and `navigate()` calls.
+
+16. **CORS Multi-Origin Fix (March 8, 2026):** Fixed a JavaScript bug in `server.js` where `'http://localhost:5173' || 'https://naveenkumar-t-git-28.github.io'` always evaluated to the first truthy string, silently ignoring the GitHub Pages origin. Replaced with a proper CORS whitelist that reads `ALLOWED_ORIGINS` env var (comma-separated) and validates each incoming request origin against the list.
+
+17. **Render Deployment Preparation (March 8, 2026):**
+    - Cleaned corrupt `.env` file (removed broken line `\api\auth\loCAMPUS_RADIUS=151.75`)
+    - Created `backend/.env.example` with placeholder values documenting all required env vars for Render
+    - Made `server.js` fully configurable via environment variables (no hardcoded secrets or origins)
+    - Backend port defaults to `5000` (Render assigns `PORT` automatically)
+    - Added `ALLOWED_ORIGINS` env var for flexible multi-origin CORS in production
+
 ---
 
 *AttendGuard — Built by NAVEENKUMAR T · Sri Sairam Engineering College · March 2026*
