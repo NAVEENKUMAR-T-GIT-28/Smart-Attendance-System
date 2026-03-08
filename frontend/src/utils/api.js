@@ -2,7 +2,7 @@ import axios from 'axios';
 import useAuthStore from '../store/authStore';
 
 const api = axios.create({
-    baseURL: '/api',
+    baseURL: 'https://lorna-featureless-anastasia.ngrok-free.dev/api'
     headers: { 'Content-Type': 'application/json' }
 });
 
