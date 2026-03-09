@@ -12,7 +12,7 @@
 
 **AttendGuard** eliminates proxy attendance using a dual-verification system. Students mark attendance through their device's built-in biometrics (fingerprint / Face ID) powered by **WebAuthn (FIDO2)**, combined with **GPS geofencing** — all from a standard web browser with zero additional hardware.
 
-**Author:** NAVEENKUMAR T — Sri Sairam Engineering College
+**Author:** NAVEENKUMAR T — Sri Sairam Institute Of Technology
 
 ---
 
