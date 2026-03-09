@@ -336,5 +336,5 @@ This project is licensed under the **ISC License**.
 
 <p align="center">
   <strong>AttendGuard</strong> — Built with ❤️ by <strong>NAVEENKUMAR T</strong><br>
-  Sri Sairam Engineering College
+  Sri Sairam Institute Of Technology
 </p>
